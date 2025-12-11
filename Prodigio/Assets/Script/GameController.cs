@@ -6,88 +6,96 @@ using TMPro;
 
 public class GameController : MonoBehaviour
 {
-    public GameObject gameOver; //painel de Game Over
-    public GameObject vitoria; //painel de Vitória
-    public static GameController instance; //instância estática para acessar de outros scripts
+    public static GameController Instance; // Singleton
 
-    public GameObject menu; //menu de pausa
+    public GameObject gameOver;
+    public GameObject vitoria;
+
+    public GameObject menu;
 
     public GameObject barraVida;
     public GameObject score;
     public GameObject pause;
 
-    
-
-    // Start é chamado antes do primeiro frame
-    void Start()
+    private void Awake()
     {
-        instance = this; //define a instância do GameController
+        // --- SISTEMA DE SINGLETON ---
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Mantém o GameController entre cenas
+        }
+        else
+        {
+            Destroy(gameObject); // Evita duplicata
+            return;
+        }
     }
 
-    // Update é chamado a cada frame
-    void Update()
+    void Start()
     {
-        //não está sendo usado (poderia ficar vazio mesmo)
+        // Não precisa mais do instance = this aqui
     }
 
     public void ShowGameOver()
     {
-        gameOver.SetActive(true); //ativa a tela de Game Over
-        barraVida.SetActive(false);
-        pause.SetActive(false);
-        //score.SetActive(false);
+        if (gameOver != null) gameOver.SetActive(true);
 
+        if (barraVida != null) barraVida.SetActive(false);
+        if (pause != null) pause.SetActive(false);
     }
 
     public void ShowVitoria()
     {
-        vitoria.SetActive(true); //ativa a tela de Vitória
-        barraVida.SetActive(false);
-        pause.SetActive(false);
-        //score.SetActive(false);
+        if (vitoria != null) vitoria.SetActive(true);
+
+        if (barraVida != null) barraVida.SetActive(false);
+        if (pause != null) pause.SetActive(false);
     }
 
     public void RestartGame(string lvlName)
     {
-        SceneManager.LoadScene(lvlName); //reinicia a cena recebida pelo nome
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(lvlName);
     }
 
     public void PassarGame(string lvlName)
     {
-        SceneManager.LoadScene(lvlName); //reinicia a cena recebida pelo nome
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(lvlName);
     }
 
     public void MenuPrincipal(string menuP)
     {
-        SceneManager.LoadScene(menuP); //carrega a cena do menu principal
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(menuP);
     }
 
     public void Config()
     {
-        menu.SetActive(true); //ativa o menu de pausa
-        Time.timeScale = 0f; //pausa o tempo do jogo
+        menu.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     public void Resetar(string resetar)
     {
-        SceneManager.LoadScene("Lvl.Lua"); //carrega a cena recebida (resetar jogo)
         Time.timeScale = 1f;
+        SceneManager.LoadScene("Lvl.Lua");
     }
 
     public void Play()
     {
-        menu.SetActive(false); //fecha o menu de pausa
-        Time.timeScale = 1f; //retoma o tempo do jogo
+        menu.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     public void Quit()
     {
         Application.Quit();
     }
-    
+
     public void Voltar()
     {
-        menu.SetActive(false); //fecha o menu de pausa
-        //Time.timeScale = 1f; //retoma o tempo do jogo
+        menu.SetActive(false);
     }
 }

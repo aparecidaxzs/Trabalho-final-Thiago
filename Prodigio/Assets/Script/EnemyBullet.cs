@@ -8,24 +8,30 @@ public class EnemyBullet : MonoBehaviour
 
     private float direction = 1f;
     private Rigidbody2D rig;
+    private float lifeTimer;
 
-    void Start()
+    void OnEnable()
     {
-        rig = GetComponent<Rigidbody2D>();
-        Destroy(gameObject, lifeTime);
+        lifeTimer = lifeTime;
+        if (rig == null)
+            rig = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
+        // movimento
         rig.linearVelocity = new Vector2(direction * speed, rig.linearVelocity.y);
+
+        // vida
+        lifeTimer -= Time.deltaTime;
+        if (lifeTimer <= 0)
+            gameObject.SetActive(false);
     }
 
-    // Chamado pelo inimigo
     public void SetDirection(float dir)
     {
         direction = Mathf.Sign(dir);
 
-        // vira o sprite corretamente
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * Mathf.Sign(dir);
         transform.localScale = scale;
@@ -33,20 +39,20 @@ public class EnemyBullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // DANO NO PLAYER
+        // acerta player
         Player p = collision.GetComponent<Player>();
         if (p != null)
         {
-            p.TomarDano(damage);   
-            Destroy(gameObject);
+            p.TomarDano(damage);
+            gameObject.SetActive(false);
             return;
         }
 
-        // PAREDES / CHÃO
+        // bate no chão
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") ||
             collision.CompareTag("Chão"))
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

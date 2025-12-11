@@ -2,28 +2,33 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    public float moveAmount = 1f;
+    public float speed = 2f;
+    public float distance = 5f;
+
+    private Vector3 startPosition;
     private CommandInvoker invoker;
 
     void Start()
     {
+        startPosition = transform.position;
         invoker = new CommandInvoker();
     }
 
     void Update()
     {
-        // Mover para a direita
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            var cmd = new MovePlatformCommand(transform, moveAmount);
-            invoker.Execute(cmd);
-        }
+        // Calcula movimento usando PingPong
+        float movement = Mathf.PingPong(Time.time * speed, distance);
 
-        // Mover para a esquerda
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            var cmd = new MovePlatformCommand(transform, -moveAmount);
-            invoker.Execute(cmd);
-        }
+        // Posição desejada
+        Vector3 targetPos = startPosition + new Vector3(movement, 0f, 0f);
+
+        // Movimento frame a frame
+        Vector3 step = targetPos - transform.position;
+
+        // Cria comando
+        ICommand moveCmd = new MovePlatformCommand(transform, step);
+
+        // Executa comando
+        invoker.Execute(moveCmd);
     }
 }

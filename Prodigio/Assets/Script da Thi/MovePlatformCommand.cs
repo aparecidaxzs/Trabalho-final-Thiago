@@ -3,21 +3,18 @@ using UnityEngine;
 public class MovePlatformCommand : ICommand
 {
     private Transform platform;
-    private float distance;
+    private Vector3 movement;
 
-    public MovePlatformCommand(Transform platform, float distance)
+    public MovePlatformCommand(Transform platform, Vector3 movement)
     {
         this.platform = platform;
-        this.distance = distance;
+        this.movement = movement;
     }
 
     public void Execute()
     {
-        platform.position += new Vector3(distance, 0f, 0f);
+        platform.position += movement;
     }
 
-    public void Undo()
-    {
-        platform.position -= new Vector3(distance, 0f, 0f);
-    }
+    public void Undo() { }
 }

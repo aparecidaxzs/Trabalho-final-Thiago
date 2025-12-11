@@ -128,13 +128,13 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.tag == "GameOver")
         {
-            GameController.instance.ShowGameOver();
+            GameController.Instance.ShowGameOver();
             Destroy(gameObject);
         }
 
         if (collision.gameObject.tag == "Vitoria")
         {
-            GameController.instance.ShowVitoria();
+            GameController.Instance.ShowVitoria();
             Destroy(gameObject);
         }
 
@@ -181,7 +181,7 @@ public class Player : MonoBehaviour
     rig.gravityScale = 0f;
     GetComponent<Collider2D>().enabled = false;
 
-    GameController.instance.ShowGameOver();
+    GameController.Instance.ShowGameOver();
 
     Destroy(gameObject, 0.2f);
 }

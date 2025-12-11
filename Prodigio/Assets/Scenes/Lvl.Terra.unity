@@ -49188,7 +49188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3449069198990562736, guid: 4f47cea3831281147bce1eb3470b98b4, type: 3}
       propertyPath: maxHealth
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3449069198990562736, guid: 4f47cea3831281147bce1eb3470b98b4, type: 3}
       propertyPath: telaDepois
