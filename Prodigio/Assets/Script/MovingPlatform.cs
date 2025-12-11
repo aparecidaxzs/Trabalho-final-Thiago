@@ -2,20 +2,28 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    public float speed = 2f; // Velocidade do movimento
-    public float distance = 5f; // Distância total de movimento (ida e volta)
-
-    private Vector3 startPosition;
+    public float moveAmount = 1f;
+    private CommandInvoker invoker;
 
     void Start()
     {
-        startPosition = transform.position; // Salva a posição inicial
+        invoker = new CommandInvoker();
     }
 
     void Update()
     {
-        // Movimento oscilante usando Mathf.PingPong para ir e voltar
-        float movement = Mathf.PingPong(Time.time * speed, distance);
-        transform.position = startPosition + new Vector3(movement, 0f, 0f);
+        // Mover para a direita
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            var cmd = new MovePlatformCommand(transform, moveAmount);
+            invoker.Execute(cmd);
+        }
+
+        // Mover para a esquerda
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            var cmd = new MovePlatformCommand(transform, -moveAmount);
+            invoker.Execute(cmd);
+        }
     }
 }
